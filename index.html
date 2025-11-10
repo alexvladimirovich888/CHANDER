@@ -1,0 +1,3097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>CoinDer - Swipe Crypto</title>
+    <!-- Фавиконы -->
+    <link rel="apple-touch-icon" sizes="57x57" href="favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#FE3C72">
+    <meta name="msapplication-TileImage" content="favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#FE3C72">
+    <!-- Стили -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fce4ec;
+            --card-bg: #ffffff;
+            --text-color: #424242;
+            --tab-bg: #f3e5f5;
+            --tab-text: #424242;
+            --primary-color: #FE3C72; /* Tinder red */
+            --secondary-color: #FF7854; /* Tinder gradient orange */
+            --success-color: #24cf5f; /* Green for positive changes */
+            --danger-color: #FE3C72; /* Red for negative changes - same as primary */
+        }
+        
+        html, body {
+            font-family: 'Inter', 'Intern', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: all 0.3s ease;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        body.dark-theme {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #e6e6e6;
+            --tab-bg: #2a2a2a;
+            --tab-text: #ffffff;
+        }
+        
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .main-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr 280px;
+            gap: 20px;
+            min-height: 80vh;
+            align-items: start;
+        }
+        
+        .left-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .center-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        .right-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 10px;
+            margin-top: 10px;
+            position: relative;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-img {
+            height: 60px;
+            margin-left: 2px;
+            vertical-align: middle;
+        }
+        
+        .logo-name {
+            height: 70px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+        
+        /* Стили для темной темы */
+        
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--primary-color);
+            position: absolute;
+            right: 0;
+        }
+        
+        .menu-toggle {
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            width: 100%;
+            padding-bottom: 5px;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        
+        .tab {
+            padding: 10px 18px;
+            cursor: pointer;
+            border-radius: 25px;
+            margin: 2px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            background-color: rgba(255, 255, 255, 0.9);
+            font-size: 13px;
+            white-space: nowrap;
+            text-align: center;
+        }
+        
+        body.dark-theme .tab {
+            background-color: var(--tab-bg);
+            color: var(--tab-text);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .tab:hover {
+            background-color: rgba(254, 60, 114, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(254, 60, 114, 0.2);
+        }
+        
+        body.dark-theme .tab:hover {
+            background-color: rgba(254, 60, 114, 0.2);
+            box-shadow: 0 4px 8px rgba(254, 60, 114, 0.3);
+        }
+        
+        .tab.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 10px rgba(254, 60, 114, 0.3);
+        }
+        
+        body.dark-theme .tab.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(254, 60, 114, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card-container {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            height: 580px;
+            margin: 0 auto;
+            perspective: 1000px;
+            box-sizing: border-box;
+            transition: transform 0.1s ease-out;
+        }
+        
+        .token-card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.5s, opacity 0.5s;
+            border-radius: 20px; /* Более закругленные углы как в Tinder */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            background-color: var(--card-bg);
+            overflow: hidden;
+            box-sizing: border-box;
+            touch-action: pan-y;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        .token-card.hidden {
+            display: none;
+        }
+        
+        .token-card.swiped-left {
+            transform: translateX(-200%) rotate(-10deg);
+            opacity: 0;
+        }
+        
+        .token-card.swiped-right {
+            transform: translateX(200%) rotate(10deg);
+            opacity: 0;
+        }
+        
+        /* Animations for card flying to tabs */
+        .token-card.flying-to-disliked {
+            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 1000;
+        }
+        
+        .token-card.flying-to-liked {
+            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 1000;
+        }
+        
+        .flying-card-clone {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1001;
+            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .flying-card-clone.animate-to-disliked {
+            transform: scale(0.3) rotate(-15deg);
+            opacity: 0.7;
+        }
+        
+        .flying-card-clone.animate-to-liked {
+            transform: scale(0.3) rotate(15deg);
+            opacity: 0.7;
+        }
+        
+        /* Enhanced tab effects for flying animation */
+        .tab.receiving-card {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)) !important;
+            color: white !important;
+            box-shadow: 0 0 20px rgba(254, 60, 114, 0.6) !important;
+            transform: scale(1.05) !important;
+        }
+        
+        .tab.receiving-liked {
+            background: linear-gradient(45deg, var(--success-color), #42d776) !important;
+            box-shadow: 0 0 20px rgba(36, 207, 95, 0.6) !important;
+        }
+        
+        /* Particle trail effect */
+        .flying-card-clone::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(254, 60, 114, 0.3), transparent);
+            border-radius: inherit;
+            opacity: 0.5;
+            animation: trail-effect 1.2s ease-out;
+        }
+        
+        @keyframes trail-effect {
+            0% {
+                transform: scale(1) rotate(0deg);
+                opacity: 0.8;
+            }
+            50% {
+                transform: scale(1.1) rotate(5deg);
+                opacity: 0.4;
+            }
+            100% {
+                transform: scale(0.9) rotate(10deg);
+                opacity: 0;
+            }
+        }
+        
+        .token-header {
+            height: 240px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .token-header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.7));
+        }
+        
+        .token-icon {
+            position: absolute;
+            bottom: -35px;
+            left: 25px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 10;
+        }
+        
+        .token-icon img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .token-content {
+            padding: 40px 25px 25px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        
+        .token-symbol {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .token-chain {
+            font-size: 14px;
+            background-color: rgba(74, 108, 247, 0.1);
+            color: var(--primary-color);
+            padding: 3px 8px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .token-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .token-metrics > div {
+            background-color: rgba(0, 0, 0, 0.03);
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 2px;
+            font-weight: 500;
+        }
+        
+        .token-boost {
+            grid-column: span 2;
+            background-color: rgba(74, 108, 247, 0.1) !important;
+            color: var(--primary-color);
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .token-description {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            max-height: 75px; /* Уменьшаем максимальную высоту */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3; /* Ограничиваем до 3 строк */
+            line-clamp: 3; /* Ограничиваем до 3 строк */
+            -webkit-box-orient: vertical;
+        }
+        
+        .token-links {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .token-link {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .token-link:hover {
+            transform: scale(1.1);
+        }
+        
+        .tinder-controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 30px;
+        }
+        
+        .tinder-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .tinder-button:hover {
+            transform: scale(1.1);
+        }
+        
+        .skip-button {
+            background-color: var(--card-bg);
+            color: var(--danger-color);
+            border: 2px solid var(--danger-color);
+            font-size: 22px;
+        }
+        
+        .skip-button:hover {
+            background-color: var(--danger-color);
+            color: #fff;
+        }
+        
+        .like-button {
+            background-color: var(--card-bg);
+            color: var(--success-color);
+            border: 2px solid var(--success-color);
+            font-size: 22px;
+        }
+        
+        .like-button:hover {
+            background-color: var(--success-color);
+            color: #fff;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 18px;
+            color: #666;
+        }
+        
+        .loading i {
+            font-size: 30px;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
+        .error {
+            text-align: center;
+            padding: 50px;
+            font-size: 18px;
+            color: var(--danger-color);
+        }
+        
+        .price-up {
+            color: var(--success-color);
+        }
+        
+        .price-down {
+            color: var(--danger-color);
+        }
+        
+        .no-more-cards {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .no-more-cards h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        
+        .no-more-cards button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .no-more-cards button:hover {
+            background-color: #3a57d7;
+        }
+        
+        /* Grid layout for liked/disliked tokens */
+        .tokens-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .tokens-grid .token-card {
+            position: relative;
+            transform: none !important;
+            opacity: 1 !important;
+            height: 290px; /* Уменьшено с 580px в ~2 раза */
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .tokens-grid .token-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        
+        .tokens-grid .token-header {
+            height: 120px; /* Уменьшено с 240px в 2 раза */
+        }
+        
+        .tokens-grid .token-content {
+            padding: 20px 12px 12px; /* Уменьшено с 40px 25px 25px */
+        }
+        
+        .tokens-grid .token-symbol {
+            font-size: 18px; /* Уменьшено с 26px */
+            font-weight: bold;
+            margin-bottom: 6px; /* Уменьшено с 10px */
+        }
+        
+        .tokens-grid .token-chain {
+            font-size: 11px; /* Уменьшено с 14px */
+            padding: 2px 6px; /* Уменьшено с 3px 8px */
+            border-radius: 8px;
+            margin-bottom: 10px; /* Уменьшено с 15px */
+        }
+        
+        .tokens-grid .token-metrics {
+            gap: 8px; /* Уменьшено с 15px */
+            margin-bottom: 12px; /* Уменьшено с 20px */
+        }
+        
+        .tokens-grid .token-metrics > div {
+            padding: 6px; /* Уменьшено с 10px */
+            border-radius: 6px;
+            font-size: 10px; /* Уменьшено с 14px */
+        }
+        
+        .tokens-grid .metric-label {
+            font-size: 9px; /* Уменьшено с 12px */
+            margin-bottom: 1px;
+        }
+        
+        .tokens-grid .token-description {
+            font-size: 10px; /* Уменьшено с 14px */
+            line-height: 1.3;
+            margin-bottom: 8px; /* Уменьшено с 15px */
+            max-height: 35px; /* Уменьшено с 75px */
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+        }
+        
+        .tokens-grid .token-links {
+            gap: 6px; /* Уменьшено с 10px */
+        }
+        
+        .tokens-grid .token-link {
+            width: 20px; /* Уменьшено с 30px */
+            height: 20px;
+            font-size: 10px; /* Уменьшено с 14px */
+        }
+        
+        .tokens-grid .token-icon {
+            width: 45px; /* Уменьшено с 70px */
+            height: 45px;
+            bottom: -22px; /* Пропорционально уменьшено */
+            left: 15px; /* Уменьшено с 25px */
+        }
+        
+        .tokens-grid .token-icon img {
+            width: 38px; /* Уменьшено с 60px */
+            height: 38px;
+        }
+        
+        @media (max-width: 768px) {
+            .card-container {
+                max-width: 90%;
+                height: 520px;
+            }
+            
+            .token-header {
+                height: 180px;
+            }
+            
+            .tinder-button {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            
+            /* Grid responsive styles */
+            .tokens-grid {
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 15px;
+                padding: 0 10px;
+            }
+            
+            .tokens-grid .token-card {
+                height: 270px; /* Уменьшено пропорционально с 520px */
+            }
+            
+            .tokens-grid .token-header {
+                height: 90px; /* Уменьшено пропорционально с 180px */
+            }
+            
+            .tokens-grid .token-content {
+                padding: 18px 10px 10px;
+            }
+            
+            .tokens-grid .token-symbol {
+                font-size: 16px;
+            }
+            
+            .tokens-grid .token-chain {
+                font-size: 10px;
+            }
+            
+            .tokens-grid .token-metrics > div {
+                font-size: 9px;
+                padding: 5px;
+            }
+            
+            .tokens-grid .token-description {
+                font-size: 9px;
+                max-height: 30px;
+            }
+            
+            .tokens-grid .token-icon {
+                width: 40px;
+                height: 40px;
+                bottom: -20px;
+                left: 12px;
+            }
+            
+            .tokens-grid .token-icon img {
+                width: 32px;
+                height: 32px;
+            }
+        }
+        
+        /* Стили для модального окна */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .info-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 500px;
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            overflow: hidden;
+            box-sizing: border-box;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            padding: 20px;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .modal-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-close {
+            cursor: pointer;
+            font-size: 20px;
+            color: #888;
+            transition: color 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            color: var(--primary-color);
+        }
+        
+        .modal-body {
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(254, 60, 114, 0.3);
+        }
+        
+        .copyright {
+            font-size: 14px;
+            color: #888;
+        }
+        
+        body.dark-theme .modal-header,
+        body.dark-theme .modal-footer {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Адаптивные стили для различных устройств */
+        
+        /* Большие настольные мониторы */
+        @media (min-width: 1921px) {
+            .container {
+                max-width: 1600px;
+            }
+            
+            .card-container {
+                max-width: 550px;
+                height: 680px;
+            }
+            
+            .token-header {
+                height: 280px;
+            }
+            
+            .token-icon {
+                width: 90px;
+                height: 90px;
+                bottom: -45px;
+            }
+            
+            .token-icon img {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .token-content {
+                padding: 50px 30px 30px;
+            }
+            
+            .token-symbol {
+                font-size: 32px;
+            }
+            
+            .token-description {
+                font-size: 16px;
+                max-height: 120px;
+            }
+        }
+        
+        /* Настольные компьютеры и ноутбуки */
+        @media (min-width: 1201px) and (max-width: 1920px) {
+            .card-container {
+                max-width: 500px;
+                height: 620px;
+            }
+            
+            .token-header {
+                height: 260px;
+            }
+        }
+        
+        /* Планшеты в ландшафтном режиме и маленькие ноутбуки */
+        @media (min-width: 992px) and (max-width: 1200px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .card-container {
+                max-width: 480px;
+                height: 600px;
+            }
+            
+            .token-header {
+                height: 220px;
+            }
+        }
+        
+        /* Планшеты в портретном режиме */
+        @media (min-width: 768px) and (max-width: 991px) {
+            .container {
+                padding: 12px;
+            }
+            
+            .card-container {
+                max-width: 90%;
+                height: 580px;
+            }
+            
+            .token-header {
+                height: 200px;
+            }
+            
+            .token-content {
+                padding: 40px 22px 22px;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab {
+                padding: 10px 20px;
+                margin: 5px;
+                font-size: 15px;
+            }
+        }
+        
+        /* Большие мобильные устройства */
+        @media (min-width: 481px) and (max-width: 767px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .card-container {
+                max-width: 92%;
+                height: 550px;
+            }
+            
+            .token-header {
+                height: 180px;
+            }
+            
+            .token-content {
+                padding: 38px 20px 20px;
+            }
+            
+            .token-metrics {
+                gap: 12px;
+            }
+            
+            .logo {
+                font-size: 24px;
+            }
+            
+            .logo-img {
+                height: 50px;
+            }
+            
+            .logo-name {
+                height: 70px;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .tab {
+                padding: 8px 16px;
+                margin: 4px;
+                font-size: 14px;
+            }
+            
+            .info-modal {
+                width: 95%;
+            }
+        }
+        
+        /* Маленькие мобильные устройства */
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .card-container {
+                max-width: 95%;
+                height: 500px;
+            }
+            
+            .token-header {
+                height: 160px;
+            }
+            
+            .token-content {
+                padding: 35px 20px 20px;
+            }
+            
+            .token-metrics {
+                gap: 10px;
+            }
+            
+            .logo {
+                font-size: 22px;
+            }
+            
+            .logo-img {
+                height: 45px;
+                margin-left: 2px;
+            }
+            
+            .logo-name {
+                height: 70px;
+                margin-right: 4px;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .tab {
+                padding: 8px 16px;
+                margin: 4px;
+                font-size: 14px;
+            }
+            
+            .info-modal {
+                width: 95%;
+            }
+            
+            .modal-logo {
+                font-size: 20px;
+            }
+            
+            .token-description {
+                font-size: 13px;
+                line-height: 1.4;
+                max-height: 60px;
+                -webkit-line-clamp: 2;
+                line-clamp: 2;
+                margin-bottom: 10px;
+            }
+            
+            .token-links {
+                margin-bottom: 5px;
+            }
+            
+            .token-symbol {
+                font-size: 22px;
+            }
+            
+            /* Grid styles for small mobile */
+            .tokens-grid {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                gap: 12px;
+                padding: 0 5px;
+            }
+            
+            .tokens-grid .token-card {
+                height: 250px; /* Уменьшено пропорционально с 500px */
+                max-width: 100%;
+            }
+            
+            .tokens-grid .token-header {
+                height: 80px; /* Уменьшено пропорционально с 160px */
+            }
+            
+            .tokens-grid .token-content {
+                padding: 15px 8px 8px;
+            }
+            
+            .tokens-grid .token-symbol {
+                font-size: 14px; /* Уменьшено пропорционально с 22px */
+            }
+            
+            .tokens-grid .token-chain {
+                font-size: 9px;
+                padding: 1px 4px;
+            }
+            
+            .tokens-grid .token-metrics {
+                gap: 6px;
+                margin-bottom: 8px;
+            }
+            
+            .tokens-grid .token-metrics > div {
+                padding: 4px;
+                font-size: 8px;
+            }
+            
+            .tokens-grid .metric-label {
+                font-size: 7px;
+            }
+            
+            .tokens-grid .token-description {
+                max-height: 25px;
+                -webkit-line-clamp: 2;
+                line-clamp: 2;
+                font-size: 8px;
+                margin-bottom: 6px;
+            }
+            
+            .tokens-grid .token-links {
+                gap: 4px;
+            }
+            
+            .tokens-grid .token-link {
+                width: 16px;
+                height: 16px;
+                font-size: 8px;
+            }
+            
+            .tokens-grid .token-icon {
+                width: 35px;
+                height: 35px;
+                bottom: -17px;
+                left: 10px;
+            }
+            
+            .tokens-grid .token-icon img {
+                width: 28px;
+                height: 28px;
+            }
+        }
+        
+        /* iPhone SE и очень маленькие экраны */
+        @media (max-width: 375px) {
+            .card-container {
+                height: 480px;
+            }
+            
+            .token-header {
+                height: 140px;
+            }
+            
+            .token-icon {
+                width: 60px;
+                height: 60px;
+                bottom: -30px;
+            }
+            
+            .token-icon img {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .token-content {
+                padding: 30px 15px 15px;
+            }
+            
+            .token-metrics {
+                gap: 8px;
+            }
+            
+            .token-metrics > div {
+                padding: 8px;
+                font-size: 13px;
+            }
+            
+            .metric-label {
+                font-size: 11px;
+            }
+            
+            .token-description {
+                font-size: 13px;
+                max-height: 70px;
+                -webkit-line-clamp: 3;
+                line-clamp: 3;
+            }
+            
+            .logo-img {
+                height: 40px;
+            }
+            
+            .logo-name {
+                height: 60px;
+            }
+            
+            /* Grid styles for very small screens */
+            .tokens-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                padding: 0 3px;
+            }
+            
+            .tokens-grid .token-card {
+                height: 240px; /* Уменьшено пропорционально с 480px */
+            }
+            
+            .tokens-grid .token-header {
+                height: 70px; /* Уменьшено пропорционально с 140px */
+            }
+            
+            .tokens-grid .token-content {
+                padding: 12px 6px 6px;
+            }
+            
+            .tokens-grid .token-symbol {
+                font-size: 13px;
+            }
+            
+            .tokens-grid .token-chain {
+                font-size: 8px;
+                padding: 1px 3px;
+            }
+            
+            .tokens-grid .token-metrics {
+                gap: 4px;
+                margin-bottom: 6px;
+            }
+            
+            .tokens-grid .token-metrics > div {
+                padding: 3px;
+                font-size: 7px;
+            }
+            
+            .tokens-grid .metric-label {
+                font-size: 6px;
+            }
+            
+            .tokens-grid .token-description {
+                max-height: 20px;
+                font-size: 7px;
+                margin-bottom: 4px;
+                -webkit-line-clamp: 2;
+                line-clamp: 2;
+            }
+            
+            .tokens-grid .token-links {
+                gap: 3px;
+            }
+            
+            .tokens-grid .token-link {
+                width: 14px;
+                height: 14px;
+                font-size: 7px;
+            }
+            
+            .tokens-grid .token-icon {
+                width: 30px;
+                height: 30px;
+                bottom: -15px;
+                left: 8px;
+            }
+            
+            .tokens-grid .token-icon img {
+                width: 25px;
+                height: 25px;
+            }
+        }
+        
+        /* Ориентация экрана */
+        @media (orientation: landscape) and (max-height: 600px) {
+            .card-container {
+                height: 85vh;
+            }
+            
+            .token-header {
+                height: 30vh;
+            }
+            
+            .token-description {
+                font-size: 12px;
+                line-height: 1.3;
+                max-height: 50px;
+                -webkit-line-clamp: 2;
+                line-clamp: 2;
+                margin-bottom: 8px;
+            }
+            
+            .token-links {
+                margin-bottom: 5px;
+            }
+            
+            /* Grid styles for landscape mode */
+            .tokens-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 15px;
+            }
+            
+            .tokens-grid .token-card {
+                height: 220px; /* Адаптировано для ландшафта */
+            }
+            
+            .tokens-grid .token-header {
+                height: 80px;
+            }
+            
+            .tokens-grid .token-content {
+                padding: 15px 8px 8px;
+            }
+            
+            .tokens-grid .token-description {
+                font-size: 9px;
+                max-height: 25px;
+                -webkit-line-clamp: 2;
+                line-clamp: 2;
+            }
+            
+            .tokens-grid .token-metrics > div {
+                font-size: 8px;
+                padding: 4px;
+            }
+        }
+        
+        /* Additional responsive styles for tabs with more options */
+        @media (max-width: 768px) {
+            .tab {
+                padding: 6px 12px !important;
+                margin: 2px !important;
+                font-size: 12px !important;
+                min-width: auto !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .tab {
+                padding: 5px 8px !important;
+                margin: 2px !important;
+                font-size: 11px !important;
+                min-width: auto !important;
+            }
+        }
+        
+        @media (max-width: 375px) {
+            .tab {
+                padding: 4px 6px !important;
+                margin: 1px !important;
+                font-size: 10px !important;
+                min-width: auto !important;
+            }
+        }
+        
+        /* Achievement notification styles */
+        .achievement-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 10000;
+            min-width: 300px;
+            max-width: 400px;
+            transform: translateX(450px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .achievement-notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        
+        .achievement-notification.hide {
+            transform: translateX(450px);
+            opacity: 0;
+        }
+        
+        .achievement-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .achievement-icon {
+            font-size: 24px;
+            margin-right: 12px;
+            animation: bounce 0.6s ease-in-out;
+        }
+        
+        .achievement-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+        }
+        
+        .achievement-description {
+            font-size: 14px;
+            opacity: 0.9;
+            margin: 5px 0 0 0;
+            line-height: 1.4;
+        }
+        
+        .achievement-progress {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            height: 6px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .achievement-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            border-radius: 10px;
+            transition: width 0.8s ease;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 60%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            80% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        /* Mobile responsive for notifications */
+        @media (max-width: 768px) {
+            .achievement-notification {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                min-width: auto;
+                max-width: none;
+                transform: translateY(-100px);
+            }
+            
+            .achievement-notification.show {
+                transform: translateY(0);
+            }
+            
+            .achievement-notification.hide {
+                transform: translateY(-100px);
+            }
+        }
+        
+        /* Navigation Tabs */
+        .tabs-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            padding: 0 20px;
+        }
+        
+        .tabs {
+            display: flex;
+            background-color: var(--tab-bg);
+            border-radius: 12px;
+            padding: 5px;
+            gap: 3px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--tab-text);
+            white-space: nowrap;
+            opacity: 0.7;
+        }
+        
+        .tab:hover {
+            opacity: 1;
+            background-color: rgba(254, 60, 114, 0.1);
+        }
+        
+        .tab.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            opacity: 1;
+            box-shadow: 0 2px 8px rgba(254, 60, 114, 0.3);
+        }
+        
+        /* Sidebar Blocks */
+        .sidebar-block {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+            border: 2px solid rgba(254, 60, 114, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-block:hover {
+            border-color: rgba(254, 60, 114, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .sidebar-block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .sidebar-block-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 0;
+        }
+        
+        .sidebar-block-count {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        
+        .sidebar-token-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+        
+        .sidebar-token-card {
+            background-color: rgba(254, 60, 114, 0.05);
+            border-radius: 10px;
+            padding: 12px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(254, 60, 114, 0.1);
+            min-height: 110px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .sidebar-token-card:hover {
+            background-color: rgba(254, 60, 114, 0.1);
+            border-color: rgba(254, 60, 114, 0.3);
+            transform: scale(1.02);
+        }
+        
+        .sidebar-token-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin: 0 auto 8px;
+            overflow: hidden;
+        }
+        
+        .sidebar-token-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .sidebar-token-symbol {
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+        
+        .sidebar-token-chain {
+            font-size: 9px;
+            color: var(--primary-color);
+            background-color: rgba(254, 60, 114, 0.1);
+            padding: 2px 6px;
+            border-radius: 6px;
+        }
+        
+        /* Center Swipe Cards */
+        .swipe-container {
+            position: relative;
+            width: 100%;
+            max-width: 520px;
+            height: 600px;
+            margin: 0 auto;
+            perspective: 1000px;
+        }
+        
+        .swipe-card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            background-color: var(--card-bg);
+            overflow: hidden;
+            cursor: grab;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        
+        .swipe-card.swiped-left {
+            transform: translateX(-200%) rotate(-10deg);
+            opacity: 0;
+        }
+        
+        .swipe-card.swiped-right {
+            transform: translateX(200%) rotate(10deg);
+            opacity: 0;
+        }
+        
+        .swipe-controls {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .swipe-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .swipe-button:hover {
+            transform: scale(1.1);
+        }
+        
+        .swipe-skip {
+            background-color: var(--card-bg);
+            color: var(--danger-color);
+            border: 2px solid var(--danger-color);
+        }
+        
+        .swipe-skip:hover {
+            background-color: var(--danger-color);
+            color: #fff;
+        }
+        
+        .swipe-like {
+            background-color: var(--card-bg);
+            color: var(--success-color);
+            border: 2px solid var(--success-color);
+        }
+        
+        .swipe-like:hover {
+            background-color: var(--success-color);
+            color: #fff;
+        }
+        
+        /* Token card styles for center swipe area */
+        .token-header {
+            height: 240px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .token-header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.7));
+        }
+        
+        .token-icon {
+            position: absolute;
+            bottom: -35px;
+            left: 25px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 10;
+        }
+        
+        .token-icon img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .token-content {
+            padding: 40px 25px 25px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        
+        .token-symbol {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .token-chain {
+            font-size: 14px;
+            background-color: rgba(254, 60, 114, 0.1);
+            color: var(--primary-color);
+            padding: 3px 8px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .token-description {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            max-height: 75px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+
+
+
+        /* Disliked Tokens List */
+        .disliked-list {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .disliked-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .disliked-title {
+            font-size: 24px;
+            color: var(--danger-color);
+            margin-bottom: 10px;
+        }
+        
+        .disliked-count {
+            font-size: 14px;
+            color: #666;
+            background-color: rgba(220, 53, 69, 0.1);
+            padding: 5px 12px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+        
+        .disliked-tokens {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 450px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        
+        .disliked-tokens::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .disliked-tokens::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+        }
+        
+        .disliked-tokens::-webkit-scrollbar-thumb {
+            background: var(--danger-color);
+            border-radius: 3px;
+        }
+        
+        .disliked-token-item {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            border: 2px solid rgba(220, 53, 69, 0.1);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .disliked-token-item:hover {
+            border-color: rgba(220, 53, 69, 0.3);
+            transform: translateX(3px);
+            box-shadow: 0 2px 10px rgba(220, 53, 69, 0.1);
+        }
+        
+        .disliked-token-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .disliked-token-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .disliked-token-info {
+            flex-grow: 1;
+        }
+        
+        .disliked-token-symbol {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+        
+        .disliked-token-chain {
+            font-size: 12px;
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger-color);
+            padding: 2px 8px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-bottom: 6px;
+        }
+        
+        .disliked-token-description {
+            font-size: 13px;
+            color: var(--text-color);
+            opacity: 0.7;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .disliked-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        
+        .disliked-action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+        
+        .remove-btn {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .remove-btn:hover {
+            background-color: #c82333;
+            transform: scale(1.05);
+        }
+        
+        .restore-btn {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .restore-btn:hover {
+            background-color: #1e7e34;
+            transform: scale(1.05);
+        }
+        
+        /* Notification animations */
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        /* Web3 Facts styles */
+        .facts-container {
+            width: 100%;
+        }
+        
+        .facts-search {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .facts-search input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 14px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        
+        .facts-search input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 15px rgba(254, 60, 114, 0.3);
+        }
+        
+        .facts-categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .category-filter {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 15px;
+            background-color: rgba(254, 60, 114, 0.1);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+        
+        .category-filter:hover,
+        .category-filter.active {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .facts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .fact-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .fact-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .fact-number {
+            position: absolute;
+            top: 12px;
+            right: 15px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 11px;
+        }
+        
+        .fact-category {
+            display: inline-block;
+            background-color: rgba(254, 60, 114, 0.1);
+            color: var(--primary-color);
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+        
+        .fact-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--text-color);
+            line-height: 1.3;
+        }
+        
+        .fact-content {
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+        
+        .fact-icon {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        /* Sidebar Facts */
+        .sidebar-fact-card {
+            background-color: rgba(254, 60, 114, 0.05);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--primary-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar-fact-card:hover {
+            background-color: rgba(254, 60, 114, 0.1);
+            transform: translateX(2px);
+        }
+        
+        .sidebar-fact-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-fact-icon {
+            font-size: 14px;
+            margin-right: 6px;
+        }
+        
+        .sidebar-fact-category {
+            font-size: 9px;
+            background-color: rgba(254, 60, 114, 0.2);
+            color: var(--primary-color);
+            padding: 1px 4px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        
+        .sidebar-fact-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--text-color);
+            line-height: 1.3;
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-fact-content {
+            font-size: 10px;
+            color: var(--text-color);
+            opacity: 0.8;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 240px 1fr 240px;
+                gap: 15px;
+            }
+        }
+        
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .left-sidebar, .right-sidebar {
+                display: none;
+            }
+            
+            .center-content {
+                max-width: 100%;
+            }
+            
+            .tab {
+                padding: 10px 15px;
+                font-size: 13px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .tabs-container {
+                margin: 15px 0;
+                padding: 0 15px;
+            }
+            
+            .tab {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            
+            .disliked-list {
+                padding: 18px;
+            }
+            
+            .disliked-tokens {
+                max-height: 420px;
+            }
+            
+            .disliked-token-item {
+                padding: 12px;
+            }
+            
+            .swipe-container {
+                max-width: 95%;
+                height: 580px;
+            }
+            
+            .swipe-button {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            
+            .achievement-notification {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                min-width: auto;
+                max-width: none;
+                transform: translateY(-100px);
+            }
+            
+            .achievement-notification.show {
+                transform: translateY(0);
+            }
+            
+            .achievement-notification.hide {
+                transform: translateY(-100px);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .tabs-container {
+                margin: 10px 0;
+                padding: 0 10px;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+                flex-wrap: nowrap;
+            }
+            
+            .tabs::-webkit-scrollbar {
+                display: none;
+            }
+            
+            .tab {
+                padding: 8px 10px;
+                font-size: 11px;
+                flex-shrink: 0;
+            }
+            
+            .disliked-list {
+                padding: 15px;
+            }
+            
+            .disliked-tokens {
+                max-height: 400px;
+            }
+            
+            .disliked-token-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .disliked-token-info {
+                order: 1;
+            }
+            
+            .disliked-actions {
+                order: 2;
+                flex-direction: row;
+                justify-content: center;
+            }
+            
+            .swipe-container {
+                max-width: 100%;
+                height: 540px;
+            }
+            
+            .swipe-controls {
+                gap: 20px;
+                margin-top: 20px;
+            }
+            
+            .swipe-button {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <div class="info-modal" id="info-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-logo">
+                    <img src="img/CoinDer-name.png" alt="CoinDer" class="logo-name">
+                    <img src="img/Coin-logo.png" alt="CoinDer Logo" class="logo-img">
+                </div>
+                <div class="modal-close" id="modal-close">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>Discover and boost the latest crypto tokens with Meminder</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="social-link twitter-link" id="twitter-link">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <div class="copyright">© 2025 Meminder.fun</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <div class="menu-toggle" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="logo">
+                <img src="img/CoinDer-name.png" alt="CoinDer" class="logo-name">
+                <img src="img/Coin-logo.png" alt="CoinDer Logo" class="logo-img">
+            </div>
+            <div class="theme-toggle" id="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </div>
+            <div class="twitter-toggle" id="twitter-toggle" style="cursor: pointer; font-size: 20px; color: var(--primary-color); position: absolute; right: 40px;">
+                <i class="fab fa-twitter"></i>
+            </div>
+        </header>
+        
+        <!-- Navigation Tabs -->
+        <div class="tabs-container">
+        <div class="tabs">
+            <div class="tab active" data-endpoint="latest-profiles">Latest Profiles</div>
+            <div class="tab" data-endpoint="top-boosts">Top Boosts</div>
+            <div class="tab" data-endpoint="top-coins">Top Coins</div>
+            <div class="tab" data-endpoint="trending">Trending</div>
+            <div class="tab" data-endpoint="disliked">Disliked</div>
+            </div>
+        </div>
+        
+        <div class="main-layout">
+            <!-- Left Sidebar -->
+            <div class="left-sidebar">
+                <!-- Most Liked Block -->
+                <div class="sidebar-block">
+                    <div class="sidebar-block-header">
+                        <h3 class="sidebar-block-title">Most Liked</h3>
+                        <span class="sidebar-block-count" id="most-liked-count">0</span>
+                    </div>
+                    <div class="sidebar-token-grid" id="most-liked-sidebar">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+            </div>
+        </div>
+        
+                <!-- Your Liked Tokens Block -->
+                <div class="sidebar-block">
+                    <div class="sidebar-block-header">
+                        <h3 class="sidebar-block-title">💖 Your Favourites</h3>
+                        <span class="sidebar-block-count" id="liked-count">0</span>
+                    </div>
+                    <div class="sidebar-token-grid" id="liked-sidebar">
+                        <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 20px; font-size: 12px; color: #999;">
+                            <i class="fas fa-heart" style="font-size: 24px; margin-bottom: 10px; color: var(--primary-color);"></i>
+                            <p style="margin: 0;">No liked tokens yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center Content -->
+            <div class="center-content">
+                <div class="swipe-container" id="swipe-container">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading tokens...</p>
+                    </div>
+                </div>
+                
+                <div class="swipe-controls">
+                    <button id="swipe-skip" class="swipe-button swipe-skip">
+                <i class="fas fa-times"></i>
+            </button>
+                    <button id="swipe-like" class="swipe-button swipe-like">
+                <i class="fas fa-heart"></i>
+            </button>
+                </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="right-sidebar">
+                <!-- Latest Boosts Block -->
+                <div class="sidebar-block">
+                    <div class="sidebar-block-header">
+                        <h3 class="sidebar-block-title">Latest Boosts</h3>
+                        <span class="sidebar-block-count" id="latest-boosts-count">0</span>
+                    </div>
+                    <div class="sidebar-token-grid" id="latest-boosts-sidebar">
+                        <div class="loading">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Web3 Facts Block -->
+                <div class="sidebar-block">
+                    <div class="sidebar-block-header">
+                        <h3 class="sidebar-block-title">📚 Web3 Facts</h3>
+                        <span class="sidebar-block-count" id="facts-count">0</span>
+                    </div>
+                    <div id="facts-sidebar">
+                        <div class="loading">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подключение JavaScript -->
+    <script src="js/api-client.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const swipeContainer = document.getElementById('swipe-container');
+            const swipeSkipBtn = document.getElementById('swipe-skip');
+            const swipeLikeBtn = document.getElementById('swipe-like');
+            
+            let currentTokens = [];
+            let currentTokenIndex = 0;
+            let currentDataSource = 'latest-profiles'; // Default data source
+            
+            // Storage system for liked/disliked tokens
+            const TokenStorage = {
+                getLikedTokens: function() {
+                    const saved = localStorage.getItem('likedTokens');
+                    return saved ? JSON.parse(saved) : [];
+                },
+                
+                getDislikedTokens: function() {
+                    const saved = localStorage.getItem('dislikedTokens');
+                    return saved ? JSON.parse(saved) : [];
+                },
+                
+                addLikedToken: function(token) {
+                    const liked = this.getLikedTokens();
+                    const tokenKey = `${token.chainId}_${token.tokenAddress}`;
+                    
+                    // Check if already exists
+                    if (!liked.find(t => `${t.chainId}_${t.tokenAddress}` === tokenKey)) {
+                        liked.unshift(token); // Add to beginning
+                        localStorage.setItem('likedTokens', JSON.stringify(liked));
+                        this.updateLikedDisplay();
+                    }
+                },
+                
+                addDislikedToken: function(token) {
+                    const disliked = this.getDislikedTokens();
+                    const tokenKey = `${token.chainId}_${token.tokenAddress}`;
+                    
+                    // Check if already exists
+                    if (!disliked.find(t => `${t.chainId}_${t.tokenAddress}` === tokenKey)) {
+                        disliked.unshift(token); // Add to beginning
+                        localStorage.setItem('dislikedTokens', JSON.stringify(disliked));
+                    }
+                },
+                
+                updateLikedDisplay: function() {
+                    const likedTokens = this.getLikedTokens();
+                    const likedSidebar = document.getElementById('liked-sidebar');
+                    const likedCount = document.getElementById('liked-count');
+                    
+                    likedCount.textContent = likedTokens.length;
+                    
+                    if (likedTokens.length === 0) {
+                        likedSidebar.innerHTML = `
+                            <div style="grid-column: 1 / -1; text-align: center; padding: 20px; font-size: 12px; color: #999;">
+                                <i class="fas fa-heart" style="font-size: 24px; margin-bottom: 10px; color: var(--primary-color);"></i>
+                                <p style="margin: 0;">No liked tokens yet</p>
+                            </div>
+                        `;
+                    } else {
+                        likedSidebar.innerHTML = likedTokens.slice(0, 6).map(token => createSidebarTokenCard(token)).join('');
+                        addSidebarTokenClickHandlers();
+                    }
+                }
+            };
+            
+            // Achievement System
+            const AchievementSystem = {
+                getStats: function() {
+                    const stats = localStorage.getItem('userStats');
+                    return stats ? JSON.parse(stats) : {
+                        totalLikes: 0,
+                        totalSkips: 0,
+                        totalSwipes: 0,
+                        achievements: []
+                    };
+                },
+                
+                saveStats: function(stats) {
+                    localStorage.setItem('userStats', JSON.stringify(stats));
+                },
+                
+                achievements: {
+                    'first_like': {
+                        id: 'first_like',
+                        title: 'First Love! 💕',
+                        description: 'You liked your first crypto token!',
+                        icon: '❤️',
+                        condition: (stats) => stats.totalLikes >= 1
+                    },
+                    'crypto_enthusiast': {
+                        id: 'crypto_enthusiast',
+                        title: 'Crypto Enthusiast 🚀',
+                        description: 'Liked 10 different tokens!',
+                        icon: '🚀',
+                        condition: (stats) => stats.totalLikes >= 10
+                    },
+                    'crypto_lover': {
+                        id: 'crypto_lover',
+                        title: 'Crypto Lover 💎',
+                        description: 'Liked 25 different tokens!',
+                        icon: '💎',
+                        condition: (stats) => stats.totalLikes >= 25
+                    },
+                    'first_skip': {
+                        id: 'first_skip',
+                        title: 'Selective Trader 🎯',
+                        description: 'You know what you want - first skip!',
+                        icon: '🎯',
+                        condition: (stats) => stats.totalSkips >= 1
+                    },
+                    'picky_trader': {
+                        id: 'picky_trader',
+                        title: 'Picky Trader 🔍',
+                        description: 'Skipped 10 tokens - you have standards!',
+                        icon: '🔍',
+                        condition: (stats) => stats.totalSkips >= 10
+                    },
+                    'swipe_master': {
+                        id: 'swipe_master',
+                        title: 'Swipe Master 👑',
+                        description: 'Made 50 total swipes!',
+                        icon: '👑',
+                        condition: (stats) => stats.totalSwipes >= 50
+                    }
+                },
+                
+                checkAchievements: function(stats) {
+                    const newAchievements = [];
+                    
+                    for (const [id, achievement] of Object.entries(this.achievements)) {
+                        if (stats.achievements.includes(id)) continue;
+                        
+                        if (achievement.condition(stats)) {
+                            stats.achievements.push(id);
+                            newAchievements.push(achievement);
+                        }
+                    }
+                    
+                    return newAchievements;
+                },
+                
+                updateStats: function(action) {
+                    const stats = this.getStats();
+                    
+                    if (action === 'like') {
+                            stats.totalLikes++;
+                            stats.totalSwipes++;
+                    } else if (action === 'skip') {
+                        stats.totalSkips = (stats.totalSkips || 0) + 1;
+                            stats.totalSwipes++;
+                    }
+                    
+                    const newAchievements = this.checkAchievements(stats);
+                    this.saveStats(stats);
+                    
+                    newAchievements.forEach(achievement => {
+                        this.showAchievementNotification(achievement);
+                    });
+                    
+                    return stats;
+                },
+                
+                showAchievementNotification: function(achievement) {
+                    const existing = document.querySelector('.achievement-notification');
+                    if (existing) {
+                        existing.remove();
+                    }
+                    
+                    const notification = document.createElement('div');
+                    notification.className = 'achievement-notification';
+                    notification.innerHTML = `
+                        <div class="achievement-header">
+                            <div class="achievement-icon">${achievement.icon}</div>
+                            <div>
+                                <h3 class="achievement-title">Achievement Unlocked!</h3>
+                                <p class="achievement-description">${achievement.title}</p>
+                            </div>
+                        </div>
+                        <p class="achievement-description">${achievement.description}</p>
+                    `;
+                    
+                    document.body.appendChild(notification);
+                    
+                    setTimeout(() => {
+                        notification.classList.add('show');
+                    }, 100);
+                    
+                    setTimeout(() => {
+                        notification.classList.add('hide');
+                        setTimeout(() => {
+                            if (notification.parentNode) {
+                                notification.parentNode.removeChild(notification);
+                            }
+                        }, 500);
+                    }, 4000);
+                }
+            };
+            
+            // Initialize app
+            initializeApp();
+            
+            // Загрузка сохраненной темы
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            // Переключение темы
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-theme');
+                if (document.body.classList.contains('dark-theme')) {
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+            
+            // Модальное окно
+            const menuToggle = document.getElementById('menu-toggle');
+            const modalOverlay = document.getElementById('modal-overlay');
+            const infoModal = document.getElementById('info-modal');
+            const modalClose = document.getElementById('modal-close');
+            
+            menuToggle.addEventListener('click', function() {
+                modalOverlay.style.display = 'block';
+                infoModal.style.display = 'block';
+            });
+            
+            modalClose.addEventListener('click', function() {
+                modalOverlay.style.display = 'none';
+                infoModal.style.display = 'none';
+            });
+            
+            modalOverlay.addEventListener('click', function() {
+                modalOverlay.style.display = 'none';
+                infoModal.style.display = 'none';
+            });
+            
+            // Twitter links
+            const twitterLink = document.getElementById('twitter-link');
+            twitterLink.href = 'https://x.com/meminder_sol';
+            
+            const twitterToggle = document.getElementById('twitter-toggle');
+            twitterToggle.addEventListener('click', function() {
+                window.open('https://x.com/meminder_sol', '_blank');
+            });
+            
+            // Initialize the application
+            async function initializeApp() {
+                // Load center swipe cards (latest profiles by default)
+                loadSwipeTokens('latest-profiles');
+                
+                // Load sidebar blocks
+                loadMostLikedSidebar();
+                loadLatestBoostsSidebar();
+                loadFactsSidebar();
+                
+                // Update liked tokens display
+                TokenStorage.updateLikedDisplay();
+                
+                // Add event listeners
+                swipeSkipBtn.addEventListener('click', skipCurrentToken);
+                swipeLikeBtn.addEventListener('click', likeCurrentToken);
+                
+                // Add tab event listeners
+                initializeTabs();
+            }
+            
+            // Initialize tab functionality
+            function initializeTabs() {
+                const tabs = document.querySelectorAll('.tab');
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', function() {
+                        const endpoint = this.dataset.endpoint;
+                        
+                        // Update active tab
+                        tabs.forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        // Load data for selected endpoint
+                        if (endpoint === 'disliked') {
+                            loadDislikedTokens();
+                    } else {
+                            loadSwipeTokens(endpoint);
+                        }
+                    });
+                });
+            }
+            
+            // Load tokens for center swipe area
+            async function loadSwipeTokens(endpoint) {
+                currentDataSource = endpoint;
+                
+                try {
+                    let data;
+                    
+                    switch(endpoint) {
+                        case 'latest-profiles':
+                        data = await DexScreenerAPI.getLatestProfiles();
+                            break;
+                        case 'latest-boosts':
+                        data = await DexScreenerAPI.getLatestBoosts();
+                            break;
+                        case 'top-boosts':
+                        data = await DexScreenerAPI.getTopBoosts();
+                            break;
+                        case 'top-coins':
+                        data = await DexScreenerAPI.getTopCoins();
+                            break;
+                        case 'trending':
+                        data = await DexScreenerAPI.getTrending();
+                            break;
+                        case 'most-liked':
+                        data = await DexScreenerAPI.getMostLiked();
+                            break;
+                    }
+                    
+                    if (!data || !Array.isArray(data) || data.length === 0) {
+                        swipeContainer.innerHTML = `
+                            <div class="error">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <p>No tokens found</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    currentTokens = data;
+                    currentTokenIndex = 0;
+                    showCurrentSwipeToken();
+                    
+                } catch (error) {
+                    console.error(`Error loading ${endpoint}:`, error);
+                    swipeContainer.innerHTML = `
+                        <div class="error">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>Error loading data</p>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Load disliked tokens
+            function loadDislikedTokens() {
+                currentDataSource = 'disliked';
+                const dislikedTokens = TokenStorage.getDislikedTokens();
+                
+                if (dislikedTokens.length === 0) {
+                    swipeContainer.innerHTML = `
+                        <div style="text-align: center; padding: 50px; color: #666;">
+                            <i class="fas fa-times-circle" style="font-size: 48px; color: var(--danger-color); margin-bottom: 20px;"></i>
+                            <h3>No disliked tokens</h3>
+                            <p>Tokens you skip will appear here.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Show disliked tokens as a list, not swipe cards
+                showDislikedTokensList(dislikedTokens);
+            }
+            
+            // Show disliked tokens list
+            function showDislikedTokensList(dislikedTokens) {
+                const html = `
+                    <div class="disliked-list">
+                        <div class="disliked-header">
+                            <h2 class="disliked-title">❌ Disliked Tokens</h2>
+                            <div class="disliked-count">${dislikedTokens.length} token${dislikedTokens.length !== 1 ? 's' : ''} skipped</div>
+                        </div>
+                        <div class="disliked-tokens">
+                            ${dislikedTokens.map((token, index) => createDislikedTokenItem(token, index)).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                swipeContainer.innerHTML = html;
+                addDislikedTokenHandlers();
+            }
+            
+            // Create disliked token item
+            function createDislikedTokenItem(token, index) {
+                const symbol = token.symbol || '';
+                const chainId = token.chainId || '';
+                const description = token.description || 'No description available.';
+                const icon = token.icon || 'https://via.placeholder.com/60';
+                const tokenAddress = token.tokenAddress || '';
+                
+                let chainName = getChainName(chainId);
+                
+                return `
+                    <div class="disliked-token-item" data-index="${index}" data-address="${tokenAddress}" data-chain="${chainId}">
+                        <div class="disliked-token-icon">
+                            <img src="${icon}" alt="${symbol}">
+                        </div>
+                        <div class="disliked-token-info">
+                            <div class="disliked-token-symbol">${symbol}</div>
+                            <div class="disliked-token-chain">${chainName}</div>
+                            <div class="disliked-token-description">${description}</div>
+                        </div>
+                        <div class="disliked-actions">
+                            <button class="disliked-action-btn restore-btn" onclick="restoreDislikedToken(${index})">
+                                ↩️ Restore
+                            </button>
+                            <button class="disliked-action-btn remove-btn" onclick="removeDislikedToken(${index})">
+                                🗑️ Remove
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Add click handlers for disliked tokens
+            function addDislikedTokenHandlers() {
+                const tokenItems = document.querySelectorAll('.disliked-token-item');
+                tokenItems.forEach(item => {
+                    item.addEventListener('click', function(e) {
+                        // Only open DexScreener if not clicking on action buttons
+                        if (!e.target.closest('.disliked-actions')) {
+                            const tokenAddress = this.dataset.address;
+                            if (tokenAddress) {
+                                const dexScreenerUrl = `https://dexscreener.com/search?q=${tokenAddress}`;
+                                window.open(dexScreenerUrl, '_blank');
+                            }
+                        }
+                    });
+                });
+            }
+            
+            // Global functions for disliked token management
+            window.restoreDislikedToken = function(index) {
+                const dislikedTokens = TokenStorage.getDislikedTokens();
+                const token = dislikedTokens[index];
+                
+                if (token) {
+                    // Add to liked tokens
+                    TokenStorage.addLikedToken(token);
+                    
+                    // Remove from disliked
+                    removeDislikedTokenByIndex(index);
+                    
+                    // Show notification
+                    showTemporaryNotification(`✅ ${token.symbol} restored to liked!`, 'success');
+                }
+            };
+            
+            window.removeDislikedToken = function(index) {
+                const dislikedTokens = TokenStorage.getDislikedTokens();
+                const token = dislikedTokens[index];
+                
+                if (token && confirm(`Are you sure you want to permanently remove ${token.symbol} from your disliked list?`)) {
+                    removeDislikedTokenByIndex(index);
+                    showTemporaryNotification(`🗑️ ${token.symbol} removed permanently!`, 'danger');
+                }
+            };
+            
+            // Helper function to remove disliked token by index
+            function removeDislikedTokenByIndex(index) {
+                const dislikedTokens = TokenStorage.getDislikedTokens();
+                dislikedTokens.splice(index, 1);
+                localStorage.setItem('dislikedTokens', JSON.stringify(dislikedTokens));
+                
+                // Refresh the list
+                if (dislikedTokens.length === 0) {
+                    loadDislikedTokens(); // Will show empty state
+                } else {
+                    showDislikedTokensList(dislikedTokens);
+                }
+            }
+            
+            // Show temporary notification
+            function showTemporaryNotification(message, type) {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: ${type === 'success' ? 'var(--success-color)' : 'var(--danger-color)'};
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    font-weight: 500;
+                    z-index: 10000;
+                    animation: slideIn 0.3s ease;
+                `;
+                notification.textContent = message;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
+            
+            // Load Most Liked sidebar
+            async function loadMostLikedSidebar() {
+                const sidebar = document.getElementById('most-liked-sidebar');
+                const count = document.getElementById('most-liked-count');
+                
+                try {
+                    const data = await DexScreenerAPI.getMostLiked();
+                    
+                    if (!data || !Array.isArray(data) || data.length === 0) {
+                        sidebar.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #999; font-size: 11px;">No data</div>';
+                        count.textContent = '0';
+                        return;
+                    }
+                    
+                    const displayData = data.slice(0, 6);
+                    count.textContent = displayData.length;
+                    sidebar.innerHTML = displayData.map(token => createSidebarTokenCard(token)).join('');
+                    addSidebarTokenClickHandlers();
+                    
+                        } catch (error) {
+                    console.error('Error loading most liked:', error);
+                    sidebar.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #999; font-size: 11px;">Error loading</div>';
+                    count.textContent = '0';
+                }
+            }
+            
+            // Load Latest Boosts sidebar
+            async function loadLatestBoostsSidebar() {
+                const sidebar = document.getElementById('latest-boosts-sidebar');
+                const count = document.getElementById('latest-boosts-count');
+                
+                try {
+                    const data = await DexScreenerAPI.getLatestBoosts();
+                    
+                    if (!data || !Array.isArray(data) || data.length === 0) {
+                        sidebar.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #999; font-size: 11px;">No data</div>';
+                        count.textContent = '0';
+                        return;
+                    }
+                    
+                    const displayData = data.slice(0, 6);
+                    count.textContent = displayData.length;
+                    sidebar.innerHTML = displayData.map(token => createSidebarTokenCard(token)).join('');
+                    addSidebarTokenClickHandlers();
+                    
+                        } catch (error) {
+                    console.error('Error loading latest boosts:', error);
+                    sidebar.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #999; font-size: 11px;">Error loading</div>';
+                    count.textContent = '0';
+                }
+            }
+            
+            // Load Facts sidebar
+            async function loadFactsSidebar() {
+                const sidebar = document.getElementById('facts-sidebar');
+                const count = document.getElementById('facts-count');
+                
+                try {
+                    const facts = await DexScreenerAPI.getWeb3Facts();
+                    
+                    if (!facts || facts.length === 0) {
+                        sidebar.innerHTML = '<div style="text-align: center; color: #999; font-size: 11px;">No facts available</div>';
+                        count.textContent = '0';
+                        return;
+                    }
+                    
+                    const displayFacts = facts.slice(0, 4);
+                    count.textContent = displayFacts.length;
+                    sidebar.innerHTML = displayFacts.map(fact => createSidebarFactCard(fact)).join('');
+                    
+                        } catch (error) {
+                    console.error('Error loading facts:', error);
+                    sidebar.innerHTML = '<div style="text-align: center; color: #999; font-size: 11px;">Error loading</div>';
+                    count.textContent = '0';
+                }
+            }
+            
+            // Show current token in swipe container
+            function showCurrentSwipeToken() {
+                if (currentTokenIndex >= currentTokens.length) {
+                    swipeContainer.innerHTML = `
+                        <div style="text-align: center; padding: 50px; color: #666;">
+                            <i class="fas fa-check-circle" style="font-size: 48px; color: var(--success-color); margin-bottom: 20px;"></i>
+                            <h3>All tokens reviewed!</h3>
+                            <p>You've seen all available tokens in this category.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const token = currentTokens[currentTokenIndex];
+                swipeContainer.innerHTML = createSwipeTokenCard(token);
+            }
+            
+            // Create swipe token card for center area
+            function createSwipeTokenCard(token) {
+                const symbol = token.symbol || '';
+                const chainId = token.chainId || '';
+                const description = token.description || 'No description available.';
+                const icon = token.icon || 'https://via.placeholder.com/60';
+                const header = token.header || 'https://via.placeholder.com/300x150';
+                const tokenAddress = token.tokenAddress || '';
+                
+                let chainName = getChainName(chainId);
+                
+                return `
+                    <div class="swipe-card" data-address="${tokenAddress}" data-chain="${chainId}">
+                        <div class="token-header" style="background-image: url('${header}')">
+                            <div class="token-header-overlay"></div>
+                            <div class="token-icon">
+                                <img src="${icon}" alt="${symbol}">
+                            </div>
+                        </div>
+                        <div class="token-content">
+                            <div class="token-symbol">${symbol}</div>
+                            <div class="token-chain">${chainName}</div>
+                            <div class="token-description">${description}</div>
+                                </div>
+                                </div>
+                `;
+            }
+            
+            // Create sidebar token card
+            function createSidebarTokenCard(token) {
+                const symbol = token.symbol || '';
+                const chainId = token.chainId || '';
+                const icon = token.icon || 'https://via.placeholder.com/60';
+                const tokenAddress = token.tokenAddress || '';
+                const description = token.description || '';
+                
+                let chainName = getChainName(chainId);
+                
+                // Truncate description for sidebar
+                const shortDescription = description.length > 60 ? 
+                    description.substring(0, 60) + '...' : description;
+                
+                return `
+                    <div class="sidebar-token-card" data-address="${tokenAddress}" data-chain="${chainId}" title="${description}">
+                        <div class="sidebar-token-icon">
+                            <img src="${icon}" alt="${symbol}">
+                            </div>
+                        <div class="sidebar-token-symbol">${symbol}</div>
+                        <div class="sidebar-token-chain">${chainName}</div>
+                        ${shortDescription ? `<div style="font-size: 8px; color: #999; margin-top: 4px; line-height: 1.2;">${shortDescription}</div>` : ''}
+                        </div>
+                `;
+            }
+            
+            // Create sidebar fact card
+            function createSidebarFactCard(fact) {
+                return `
+                    <div class="sidebar-fact-card">
+                        <div class="sidebar-fact-header">
+                            <span class="sidebar-fact-icon">${fact.icon}</span>
+                            <span class="sidebar-fact-category">${fact.category}</span>
+                        </div>
+                        <div class="sidebar-fact-title">${fact.title}</div>
+                        <div class="sidebar-fact-content">${fact.content}</div>
+                    </div>
+                `;
+            }
+            
+            // Helper function to get chain name
+            function getChainName(chainId) {
+                const chainMapping = {
+                    'ethereum': 'Ethereum',
+                    'eth': 'Ethereum',
+                    'bsc': 'BSC',
+                    'binance smart chain': 'BSC',
+                    'polygon': 'Polygon',
+                    'solana': 'Solana',
+                    'sol': 'Solana',
+                    'arbitrum': 'Arbitrum',
+                    'avalanche': 'Avalanche',
+                    'base': 'Base',
+                    'optimism': 'Optimism'
+                };
+                
+                return chainMapping[chainId.toLowerCase()] || chainId;
+            }
+            
+            // Swipe action handlers
+            function skipCurrentToken() {
+                if (currentTokenIndex >= currentTokens.length) return;
+                
+                    const currentToken = currentTokens[currentTokenIndex];
+                const card = document.querySelector('.swipe-card');
+                    
+                // Add to disliked storage only if not already viewing disliked tokens
+                if (currentDataSource !== 'disliked') {
+                        TokenStorage.addDislikedToken(currentToken);
+                    
+                    // Update achievement stats
+                    AchievementSystem.updateStats('skip');
+                }
+                
+                // Animate card
+                if (card) {
+                card.classList.add('swiped-left');
+                
+                setTimeout(() => {
+                        currentTokenIndex++;
+                        showCurrentSwipeToken();
+                    }, 300);
+                }
+            }
+            
+            function likeCurrentToken() {
+                if (currentTokenIndex >= currentTokens.length) return;
+                
+                    const currentToken = currentTokens[currentTokenIndex];
+                const card = document.querySelector('.swipe-card');
+                
+                // Add to liked storage
+                        TokenStorage.addLikedToken(currentToken);
+                        
+                // Update achievement stats
+                        AchievementSystem.updateStats('like');
+                
+                // Animate card
+                if (card) {
+                card.classList.add('swiped-right');
+                
+                setTimeout(() => {
+                        currentTokenIndex++;
+                        showCurrentSwipeToken();
+                    }, 300);
+                }
+                
+                // Trigger haptic feedback
+                if (navigator.vibrate) {
+                    navigator.vibrate([50, 30, 50]);
+                }
+            }
+            
+            // Add click handlers for sidebar tokens
+            function addSidebarTokenClickHandlers() {
+                const sidebarCards = document.querySelectorAll('.sidebar-token-card');
+                sidebarCards.forEach(card => {
+                    card.addEventListener('click', function() {
+                        const tokenAddress = this.dataset.address;
+                        if (tokenAddress) {
+                            const dexScreenerUrl = `https://dexscreener.com/search?q=${tokenAddress}`;
+                            window.open(dexScreenerUrl, '_blank');
+                        }
+                });
+            });
+            }
+        });
+    </script>
+</body>
+</html>
+
